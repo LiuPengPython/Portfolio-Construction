@@ -1,4 +1,5 @@
-1_select_time.py：本模块获取由2016年7月1日到2018年12月31日的上证指数并把每个月月初第一个交易日的行情保存到000001M.csv，这一步需要手动确定所有月份中哪个月份涨幅最大，哪个月份跌幅最大。
+# 1_select_time.py：本模块获取由2016年7月1日到2018年12月31日的上证指数并把每个月月初第一个交易日的行情保存到000001M.csv，这一步需要手动确定所有月份中哪个月份涨幅最大，哪个月份跌幅最大。
+
 from jqdatasdk import *
 import time
 
@@ -48,7 +49,8 @@ new_df.to_csv('./select_time/000001M.csv')
 # bull 20161101 20161130  0.048317982
 # bear 20180601 20180630 -0.097419955
 
-2_index_components.py：本模块根据第一个模块中确定的牛熊月份获取指定时间段中证500指数、中小板指和创业板指的成分股列表，共6个txt文件。
+# 2_index_components.py：本模块根据第一个模块中确定的牛熊月份获取指定时间段中证500指数、中小板指和创业板指的成分股列表，共6个txt文件。
+
 from jqdatasdk import *
 import numpy as np
 import time
@@ -90,7 +92,8 @@ def read_list():
 if __name__ == "__main__":
     read_list()
 
-3_cae_data.py：本模块根据模块1确定的时间和模块2确定的股票列表获取股票交易行情数据
+# 3_cae_data.py：本模块根据模块1确定的时间和模块2确定的股票列表获取股票交易行情数据
+
 import tushare as ts
 import numpy as np
 import time
@@ -127,7 +130,8 @@ def read_list(filename='stock_list.txt'):
 if __name__ == "__main__":
     read_list(filename='stock_list.txt')
 
-4_mpl_finance.py：本模块是为了绘制蜡烛图而准备的函数库
+# 4_mpl_finance.py：本模块是为了绘制蜡烛图而准备的函数库
+
 import numpy as np
 from matplotlib import colors as mcolors
 from matplotlib.collections import LineCollection, PolyCollection
@@ -255,7 +259,8 @@ def _candlestick(ax, quotes, width=0.2, colorup='k', colordown='r',
 
     return lines, patches
 
-5_draw.py：本模块绘制卷积神经网络所需训练数据
+# 5_draw.py：本模块绘制卷积神经网络所需训练数据
+
 import matplotlib.pyplot as plt
 from matplotlib.dates import date2num
 from mpl_finance import candlestick_ohlc
@@ -305,7 +310,8 @@ def read_list(filename='stock_list.txt'):
 if __name__ == "__main__":
     read_list(filename='stock_list.txt')
 
-6_draw_val.py：本模块绘制卷积神经网络所需验证数据
+# 6_draw_val.py：本模块绘制卷积神经网络所需验证数据
+
 import matplotlib.pyplot as plt
 from matplotlib.dates import date2num
 from mpl_finance import candlestick_ohlc
@@ -355,14 +361,16 @@ def read_list(filename='stock_list.txt'):
 if __name__ == "__main__":
     read_list(filename='stock_list.txt')
 
-7_construct_new_list.py：通过观察绘制的图像，可以轻松得知哪些股票因为停盘而没有交易数据，本模块使用由手工构建的tingpai.txt，将原stock_list.txt中停盘的股票去除。
+# 7_construct_new_list.py：通过观察绘制的图像，可以轻松得知哪些股票因为停盘而没有交易数据，本模块使用由手工构建的tingpai.txt，将原stock_list.txt中停盘的股票去除。
+
 import numpy as np
 
 stocks = np.loadtxt('stock_list.txt', dtype=np.str)
 tingpai = np.loadtxt('tingpai.txt', dtype=np.str)
 np.savetxt('stock_list.txt', np.array(list(set(stocks)-set(tingpai)), dtype=np.str), fmt='%s')
 
-8_cae_with_loss_val.py：本模块使用以上模块绘制蜡烛图训练卷积神经网络自编码器并绘制训练损失图和最终效果图。
+# 8_cae_with_loss_val.py：本模块使用以上模块绘制蜡烛图训练卷积神经网络自编码器并绘制训练损失图和最终效果图。
+
 from keras.layers import Input, Dense, Conv2D, MaxPooling2D, UpSampling2D
 from keras.models import Model
 import matplotlib.pyplot as plt
@@ -485,7 +493,8 @@ for i in range(n):
     plt.imshow(rgb2gray(decoded_imgs[i].reshape(300, 300, 3)), cmap='gray')
 plt.savefig('cae.jpg')
 
-9_cae_extract.py：本模块利用训练好的卷积神经网络自编码器将蜡烛图提取为数字特征。
+# 9_cae_extract.py：本模块利用训练好的卷积神经网络自编码器将蜡烛图提取为数字特征。
+
 from keras.layers import Input, Dense, Conv2D, MaxPooling2D, UpSampling2D
 from keras.models import Model
 import matplotlib.pyplot as plt
@@ -541,7 +550,8 @@ for stock in stock_list:
         f_obj.write(','.join(map(str, encoded_vec)))
         f_obj.write('\n')
 
-10_pca_graph.py：本模块将上一模块提取的特征进行PCA降维。
+# 10_pca_graph.py：本模块将上一模块提取的特征进行PCA降维。
+
 import pandas as pd
 from sklearn.decomposition import PCA
 import matplotlib.pyplot as plt
@@ -613,7 +623,8 @@ def save(n, data):
 if __name__ == "__main__":
     save(40, data)
 
-11_cluster.py：本模块根据降维后的数据将股票进行聚类，可选聚类方法包括MeanShift、DBSCAN和高斯混合模型
+# 11_cluster.py：本模块根据降维后的数据将股票进行聚类，可选聚类方法包括MeanShift、DBSCAN和高斯混合模型
+
 # import numpy as np
 # from sklearn.cluster import MeanShift, estimate_bandwidth
 # import matplotlib.pyplot as plt
@@ -669,7 +680,8 @@ np.savetxt('cluster_labels.csv', y_pred, delimiter='\n', fmt='%d')
 plt.scatter(X[:, 0], X[:, 1], c=y_pred, cmap='Set1')
 plt.show()
 
-12_attn_data.py：本模块获取注意力机制训练数据。
+# 12_attn_data.py：本模块获取注意力机制训练数据。
+
 from jqdatasdk import *
 import numpy as np
 import pandas as pd
@@ -721,7 +733,8 @@ if __name__ == "__main__":
     read_list(filename='stock_list.txt')
     build_labels(filename='stock_list.txt')
 
-13_self_attn.py：本模块训练注意力机制模型。
+# 13_self_attn.py：本模块训练注意力机制模型。
+
 from keras import backend as K
 from keras.engine.topology import Layer
 from keras.models import Model
@@ -870,7 +883,8 @@ model.fit(pad_x_train, y_train,
           epochs=50)
 model.save_weights('attn.h5')
 
-14_suggets.py：本模块根据聚类结果和训练好的注意力机制模型进行投资组合构建。
+# 14_suggets.py：本模块根据聚类结果和训练好的注意力机制模型进行投资组合构建。
+
 from keras import backend as K
 from keras.engine.topology import Layer
 from keras.models import Model
@@ -992,7 +1006,8 @@ for l in unique_labels:
 
 np.savetxt('portfolio.txt', np.array(portfolio, dtype=np.str), delimiter='\n', fmt='%s')
 
-15_index_data.py：本模块获取用与对比的指数数据。
+# 15_index_data.py：本模块获取用与对比的指数数据。
+
 from jqdatasdk import *
 import time
 
@@ -1025,7 +1040,8 @@ def read_list():
 if __name__ == "__main__":
     read_list()
 
-16_fund_data.py：本模块获取用于对比的基金数据。
+# 16_fund_data.py：本模块获取用于对比的基金数据。
+
 from jqdatasdk import *
 from datetime import datetime
 import time
@@ -1059,7 +1075,8 @@ def read_list():
 if __name__ == "__main__":
     read_list()
 
-17_compare.py：本模块用于生成对比结果Excel表。
+# 17_compare.py：本模块用于生成对比结果Excel表。
+
 import numpy as np
 import pandas as pd
 
